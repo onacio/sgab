@@ -5,14 +5,14 @@
 {% block conteudo %}
   <div class="container">
     
-    <h1><p class="text-center">UNIDADES DE SAÚDE</p></h1>
+    <h1><p class="text-center">CADASTRO DE LOTAÇÃO</p></h1>
         
     <div class="container mb-2">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#unidadeModal">
         <i class="bi bi-houses"></i>
-        Adicionar unidade de saúde
+        Cadastrar lotação
       </button>
-      <!-- <a class="btn btn-success" href="{{url_for('admin.admin_unidades.relatorio')}}">
+      <!-- <a class="btn btn-success" href="">
         <i class="bi bi-filetype-pdf"></i>
         Relatório
       </a> -->
@@ -27,28 +27,32 @@
         <table id="tabela" class="table table-striped">
           <thead class="text-center">
             <tr class="text-center">
-              <th width="3%">ID</th>
-              <th width="50%">Nome</th>              
-              <th>Nome curto</th>
-              <th width="8%">CNES</th>            
-              <th width="8%">INE</th>                                 
-              <th width="11%">Ações</th>
+              <th width="8%">ID</th>
+              <th>Nome</th>
+              <th width="10%">Ativo</th>
+              <th width="15%">Ações</th>
             </tr>
           </thead>
           <tbody>
             
-            {% if unidades %}
-              {% for unidade in unidades: %}
+            {% if lotacoes %}
+              {% for lotacao in lotacoes: %}
                   <tr>            
-                    <td>{{ unidade[0] }}</td>
-                    <td>{{ unidade[1] }}</td>
-                    <td>{{ unidade[2] }}</td>
-                    <td>{{ unidade[3] }}</td>
-                    <td>{{ unidade[4] }}</td> 
+                    <td>{{ lotacao.id }}</td>
+                    <td>{{ lotacao.nome }}</td>
+
+                    {% if lotacao.ativo == 1 %}
+                      <td class="text-center"><i class="bi bi-check-circle"></i></td>
+                    {% elif lotacao.ativo == 0 %}
+                      <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
+                    {% else %}
+                      <td></td>
+                    {% endif %}
+
                     <td>                                        
                       <div class="container">                          
-                          <a class="btn btn-success btn-sm" href="{{ url_for('admin.admin_unidades.editar', id_unidade=unidade[0]) }}"><i class="bi bi-pencil-square"></i></a>
-                          <a class="btn btn-danger btn-sm" href="{{ url_for('admin.admin_unidades.excluir', id_unidade=unidade[0]) }}"><i class="bi bi-trash3-fill"></i></a>
+                          <a class="btn btn-success btn-sm" href="{{ url_for('admin_bp.editar_lotacao', id=lotacao.id) }}"><i class="bi bi-pencil-square"></i></a>
+                          <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_lotacao', id=lotacao.id) }}" onclick="return confirm('Você tem certeza que deseja excluir esta lotação?');"><i class="bi bi-trash3-fill"></i></a>
                       </div>
                     </td> 
                   </tr>
@@ -84,26 +88,19 @@
         
         <div class="modal-body">
 
-          <form action="{{url_for('admin.admin_unidades.inserir')}}" method="post">
+          <form action="{{ url_for('admin_bp.lotacao') }}" method="post">
             
             <div class="mb-3">
               <label for="nome" class="col-form-label">Nome:</label>
               <input type="text" name="nome" class="form-control" id="name">
 
-              <label for="apelido" class="col-form-label">Apelido:</label>
-              <input type="text" name="apelido" class="form-control" id="apelido">
-
-              <label for="cnes" class="col-form-label">CNES:</label>
-              <input type="number" name="cnes" class="form-control" id="cnes">
-
-              <label for="ine" class="col-form-label">INE:</label>
-              <input type="number" name="ine" class="form-control" id="ine">
-            </div>            
-
-            <!-- <div class="mb-3">
-              <label for="message-text" class="col-form-label">Message:</label>
-              <textarea class="form-control" id="message-text"></textarea>
-            </div> -->
+              <label for="status" class="form-label">Ativo</label>
+                <select class="form-select" name="ativo">
+                    <option value="" selected>-</option>
+                    <option value="true">Ativo</option>
+                    <option value="false">Inativo</option>
+                </select>
+            </div>
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>

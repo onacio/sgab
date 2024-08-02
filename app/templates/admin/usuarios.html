@@ -25,26 +25,26 @@
                       <th scope="col">Usuário</th>            
                       <th scope="col">Senha</th>            
                       <th scope="col">E-mail</th>            
-                      <th scope="col">Função</th>            
-                      <th width="13%" scope="col">Setor</th>            
-                      <th width="5%" scope="col">Status</th>            
+                      <th scope="col">Nível</th>
+                      <th width="13%" scope="col">Lotação</th>
+                      <th width="5%" scope="col">Ativo</th>
                       <th width="11%" scope="col">Ações</th>            
                   </tr>
                 </thead>
                 <tbody>
                 {% for usuario in usuarios: %}          
                     <tr>  
-                        <td> {{usuario[0] }}</td>
-                        <td> {{usuario[1] }} {{ usuario[2] }}</td>            
-                        <td> {{usuario[3] }}</td>
-                        <td> {{usuario[4] }}</td>
-                        <td> {{usuario[5] }}</td>
-                        <td> {{usuario[6] }}</td>
-                        <td> {{usuario[7] }}</td>
+                        <td> {{ usuario.id }}</td>
+                        <td> {{usuario.nome }} {{ usuario.sobrenome }}</td>
+                        <td> {{usuario.usuario }}</td>
+                        <td> {{usuario.senha }}</td>
+                        <td> {{usuario.email }}</td>
+                        <td> {{usuario.nivel_acesso }}</td>
+                        <td> {{usuario.lotacao }}</td>
                         
-                        {% if usuario[8] == 1 %}                
+                        {% if usuario.ativo == 1 %}
                           <td class="text-center"><i class="bi bi-check-circle"></i></td>                
-                        {% elif usuario[8] == 0 %}
+                        {% elif usuario.ativo == 0 %}
                           <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
                         {% else %}  
                           <td></td>
@@ -52,8 +52,8 @@
                                         
                         <td>                                        
                             <div class="container">
-                                <a class="btn btn-success btn-sm" href="{{ url_for('admin.admin_usuarios.editar', id_usuario=usuario[0]) }}"><i class="bi bi-pencil-square"></i></a>
-                                <a class="btn btn-danger btn-sm" href="{{ url_for('admin.admin_usuarios.excluir', id_usuario=usuario[0]) }}"><i class="bi bi-trash3-fill"></i></a>
+                                <a class="btn btn-success btn-sm" href=""><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_usuario', id=usuario.id) }}" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
                             </div>
                         </td>
                     </tr>                     
@@ -78,7 +78,9 @@
         
         <div class="modal-body">
 
-          <form action="{{url_for('admin.admin_usuarios.inserir')}}" method="post">
+          <form action="{{ url_for('admin_bp.usuarios') }}" method="post">
+
+              <input type="hidden" name="id" id="usuario_id">
             
             <div class="row mb-3 g-2">                
               <!-- Primeira linha -->
@@ -112,31 +114,31 @@
               
               <!-- Terceira linha -->
               <div class="col-5">
-                <label for="funcao" class="form-label">Função</label>
-                <select class="form-select" name="funcao">
+                <label for="funcao" class="form-label">Nível de acesso</label>
+                <select class="form-select" name="nivel">
                     <option value="" selected>-</option>
-                    <option value="admin">Administrador</option>
+                    <option value="master">Master</option>
                     <option value="gestor">Gestor</option>
-                    <option value="user">Usuário</option>                
+                    <option value="usuario">Usuário</option>
                 </select>
               </div>
 
               <div class="col-5">
-                <label for="unidade" class="form-label">Unidade</label>
-                <select class="form-select" name="unidade">
+                <label for="lotacao" class="form-label">Lotação</label>
+                <select class="form-select" name="lotacao">
                     <option value="" selected>-</option>
-                    {% for unidade in unidades: %}
-                      <option value="{{unidade[2]}}">{{unidade[2]}}</option>                                   
+                    {% for lotacao in lotacoes: %}
+                      <option value="{{ lotacao.nome }}">{{ lotacao.nome }}</option>
                     {% endfor %}
                 </select>
               </div>
 
               <div class="col-2">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" name="status">
+                <label for="ativo" class="form-label">Ativo</label>
+                <select class="form-select" name="ativo">
                     <option value="" selected>-</option>
-                    <option value="1">Ativo</option>
-                    <option value="0">Inativo</option>                  
+                    <option value="true">Ativo</option>
+                    <option value="false">Inativo</option>
                 </select>
               </div>
               <!-- FIM da terceira linha -->
