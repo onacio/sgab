@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .models import Usuario, Lotacao
-from app.database import db
-from app.modulos.auth.auth import login_required
+from database import db
+from apps.auth.auth import login_required
 
-admin_bp = Blueprint('admin_bp', __name__, url_prefix='/admin', template_folder='templates')
+admin_bp = Blueprint('admin_bp', __name__, url_prefix='/admin', template_folder='templates', static_folder='static')
 
 @admin_bp.route('/')
 @login_required('master')
@@ -41,10 +41,10 @@ def excluir_usuario(id):
     if usuario:
         db.session.delete(usuario)
         db.session.commit()
-        flash('Usuario excluído com sucesso!')
+        flash('Usuario excluído com sucesso!', 'success')
         return redirect(url_for('admin_bp.usuarios'))
 
-    flash('Usuario não encontrado')
+    flash('Usuario não encontrado', 'danger')
 
 '''
 AQUI ESTÁ CÓDIFICADO AS ROTAS DE LISTAR, EXCLUIR E EDITAR AS
@@ -64,7 +64,7 @@ def lotacao():
         db.session.add(lotacao)
         db.session.commit()
 
-        flash('dados de lotação cadastrados com sucesso!')
+        flash('dados de lotação cadastrados com sucesso!', 'success')
 
         return redirect(url_for('admin_bp.lotacao'))
 
@@ -79,11 +79,11 @@ def excluir_lotacao(id):
         db.session.delete(lotacao)
         db.session.commit()
 
-        flash('Lotação excluída com sucesso!')
+        flash('Lotação excluída com sucesso!', 'success')
 
         return redirect(url_for('admin_bp.lotacao'))
 
-    flash('Lotação não encontrado')
+    flash('Lotação não encontrado', 'danger')
     return redirect(url_for('admin_bp.lotacao'))
 
 @admin_bp.route('/lotacao/editar/<int:id>')

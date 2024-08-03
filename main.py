@@ -1,15 +1,15 @@
 from flask import Flask
-from app.database import db
+from database import db
 from flask_migrate import Migrate
 
 """ IMPORTES DAS BLUEPRINTS """
-from app.modulos.auth import auth_bp
-from app.modulos.admin import admin_bp
-from app.modulos.gestor import gestor_bp
-from app.modulos.home import home_bp
+from apps.auth import auth_bp
+from apps.admin import admin_bp
+from apps.gestor import gestor_bp
+from apps.home import home_bp
 
 
-app = Flask(__name__, static_folder='app/static')
+app = Flask(__name__, static_folder='static')
 
 app.config['SECRET_KEY'] = 'minha-chave'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'

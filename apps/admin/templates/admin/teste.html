@@ -52,7 +52,7 @@
                                         
                         <td>                                        
                             <div class="container">
-                                <a class="btn btn-success btn-sm" href=""><i class="bi bi-pencil-square"></i></a>
+                                <button class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#usuarioModal" data-id="{{ usuario.id }}" data-nome="{{ usuario.nome }}" data-sobrenome="{{ usuario.sobrenome }}" data-usuario="{{ usuario.usuario }}" data-senha="{{ usuario.senha }}" data-email="{{ usuario.email }}" data-nivel="{{ usuario.nivel_acesso }}" data-lotacao="{{ usuario.lotacao }}" data-ativo="{{ usuario.ativo }}"><i class="bi bi-pencil-square"></i></button>
                                 <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_usuario', id=usuario.id) }}" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
                             </div>
                         </td>
@@ -114,8 +114,8 @@
               
               <!-- Terceira linha -->
               <div class="col-5">
-                <label for="funcao" class="form-label">Nível de acesso</label>
-                <select class="form-select" name="nivel">
+                <label for="nivel" class="form-label">Nível de acesso</label>
+                <select class="form-select" id="nivel" name="nivel">
                     <option value="" selected>-</option>
                     <option value="master">Master</option>
                     <option value="gestor">Gestor</option>
@@ -125,7 +125,7 @@
 
               <div class="col-5">
                 <label for="lotacao" class="form-label">Lotação</label>
-                <select class="form-select" name="lotacao">
+                <select class="form-select" id="lotacao" name="lotacao">
                     <option value="" selected>-</option>
                     {% for lotacao in lotacoes: %}
                       <option value="{{ lotacao.nome }}">{{ lotacao.nome }}</option>
@@ -135,7 +135,7 @@
 
               <div class="col-2">
                 <label for="ativo" class="form-label">Ativo</label>
-                <select class="form-select" name="ativo">
+                <select class="form-select" id="ativo" name="ativo">
                     <option value="" selected>-</option>
                     <option value="true">Ativo</option>
                     <option value="false">Inativo</option>
@@ -152,5 +152,34 @@
       </div>
     </div>
   </div> 
-    
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = button.getAttribute('data-id');
+            const nome = button.getAttribute('data-nome');
+            const sobrenome = button.getAttribute('data-sobrenome');
+            const usuario = button.getAttribute('data-usuario');
+            const senha = button.getAttribute('data-senha');
+            const email = button.getAttribute('data-email');
+            const nivel = button.getAttribute('data-nivel');
+            const lotacao = button.getAttribute('data-lotacao');
+            const ativo = button.getAttribute('data-ativo');
+
+            document.getElementById('usuario_id').value = id;
+            document.getElementById('nome').value = nome;
+            document.getElementById('sobrenome').value = sobrenome;
+            document.getElementById('usuario').value = usuario;
+            document.getElementById('senha').value = senha;
+            document.getElementById('email').value = email;
+            document.getElementById('nivel').value = nivel;
+            document.getElementById('lotacao').value = lotacao;
+            document.getElementById('ativo').value = ativo;
+        });
+    });
+});
+</script>
+
 {% endblock %}

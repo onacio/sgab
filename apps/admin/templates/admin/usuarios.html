@@ -1,0 +1,170 @@
+{% extends 'admin/template_base.html' %}
+
+{% block titulo %}Admin - Lista de usuários{% endblock %}
+
+{% block conteudo %}
+
+<div class="container">
+
+    <h1><p class="text-center">Usuários do sistema</p></h1>
+    
+    <div class="container mb-2">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usuarioModal">
+          <i class="bi bi-person-add"></i>
+          Adicionar usuário
+        </button>
+    </div>    
+
+    <div class="container">
+        <div class="table-responsive">
+            <table id="tabela" class="table table-striped">
+                <thead class="text-center">
+                  <tr class="text-center">
+                      <th scope="col">ID</th>
+                      <th scope="col">Nome</th>            
+                      <th scope="col">Usuário</th>            
+                      <th scope="col">Senha</th>            
+                      <th scope="col">E-mail</th>            
+                      <th scope="col">Nível</th>
+                      <th width="13%" scope="col">Lotação</th>
+                      <th width="5%" scope="col">Ativo</th>
+                      <th width="11%" scope="col">Ações</th>            
+                  </tr>
+                </thead>
+                <tbody>
+                {% for usuario in usuarios: %}          
+                    <tr>  
+                        <td> {{ usuario.id }}</td>
+                        <td> {{usuario.nome }} {{ usuario.sobrenome }}</td>
+                        <td> {{usuario.usuario }}</td>
+                        <td> {{usuario.senha }}</td>
+                        <td> {{usuario.email }}</td>
+                        <td> {{usuario.nivel_acesso }}</td>
+                        <td> {{usuario.lotacao }}</td>
+                        
+                        {% if usuario.ativo == 1 %}
+                          <td class="text-center"><i class="bi bi-check-circle"></i></td>                
+                        {% elif usuario.ativo == 0 %}
+                          <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
+                        {% else %}  
+                          <td></td>
+                        {% endif %}  
+                                        
+                        <td>                                        
+                            <div class="container">
+                                <a class="btn btn-success btn-sm edit-btn" href=""
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#usuarioModal"
+                                   data-id="{{ usuario.id }}"
+                                   data-nome="{{ usuario.nome }}"
+                                   data-sobrenome="{{ usuario.sobrenome }}"
+                                   data-usuario="{{ usuario.usuario }}"
+                                   data-senha="{{ usuario.senha }}"
+                                   data-email="{{ usuario.email }}"
+                                   data-nivel="{{ usuario.nivel_acesso }}"
+                                   data-lotacao="{{ usuario.lotacao }}"
+                                   data-ativo="{{ usuario.ativo }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_usuario', id=usuario.id) }}" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
+                            </div>
+                        </td>
+                    </tr>                     
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+    <div class="modal-dialog modal-lg">
+      
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro de usuário</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-body">
+
+          <form action="{{ url_for('admin_bp.usuarios') }}" method="post">
+
+              <input type="hidden" name="id" id="usuario_id">
+            
+            <div class="row mb-3 g-2">                
+              <!-- Primeira linha -->
+              <div class="col-2">
+                <label for="nome" class="form-label">Primeiro nome</label>
+                <input type="text" class="form-control" id="nome" name="nome">
+              </div>
+
+              <div class="col-5">
+                <label for="sobrenome" class="form-label">Sobrenome</label>
+                <input type="text" class="form-control" id="sobrenome" name="sobrenome">
+              </div>
+
+              <div class="col-5">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email">
+              </div>
+              <!-- FIM da primeira linha -->
+              
+              <!-- Segunda linha -->
+              <div class="col-6">
+                <label for="usuario" class="form-label">Usuário</label>
+                <input type="text" class="form-control" id="usuario" name="usuario">
+              </div>
+
+              <div class="col-6">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="senha" name="senha">
+              </div>
+              <!-- FIM da segunda linha -->
+              
+              <!-- Terceira linha -->
+              <div class="col-5">
+                <label for="nivel" class="form-label">Nível de acesso</label>
+                <select class="form-select" id="nivel" name="nivel">
+                    <option value="" selected>-</option>
+                    <option value="master">Master</option>
+                    <option value="gestor">Gestor</option>
+                    <option value="usuario">Usuário</option>
+                </select>
+              </div>
+
+              <div class="col-5">
+                <label for="lotacao" class="form-label">Lotação</label>
+                <select class="form-select" id="lotacao" name="lotacao">
+                    <option value="" selected>-</option>
+                    {% for lotacao in lotacoes: %}
+                      <option value="{{ lotacao.nome }}">{{ lotacao.nome }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+
+              <div class="col-2">
+                <label for="ativo" class="form-label">Ativo</label>
+                <select class="form-select" id="ativo" name="ativo">
+                    <option value="" selected>-</option>
+                    <option value="true">Ativo</option>
+                    <option value="false">Inativo</option>
+                </select>
+              </div>
+              <!-- FIM da terceira linha -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Salvar</button>
+            </div>
+          </form>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
