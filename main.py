@@ -9,7 +9,7 @@ from app.modulos.gestor import gestor_bp
 from app.modulos.home import home_bp
 
 
-app = Flask(__name__, template_folder='app/templates', static_folder='app/static')
+app = Flask(__name__, static_folder='app/static')
 
 app.config['SECRET_KEY'] = 'minha-chave'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///banco.db'

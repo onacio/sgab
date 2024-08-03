@@ -3,7 +3,7 @@ from .models import Usuario, Lotacao
 from app.database import db
 from app.modulos.auth.auth import login_required
 
-admin_bp = Blueprint('admin_bp', __name__, url_prefix='/admin')
+admin_bp = Blueprint('admin_bp', __name__, url_prefix='/admin', template_folder='templates')
 
 @admin_bp.route('/')
 @login_required('master')
@@ -27,8 +27,6 @@ def usuarios():
         usuario = Usuario(nome, sobrenome, usuario, senha, email, lotacao, nivel_acesso, ativo)
         db.session.add(usuario)
         db.session.commit()
-
-        flash('dados de usuário cadastrados com sucesso!')
 
         return redirect(url_for('admin_bp.usuarios'))
 
