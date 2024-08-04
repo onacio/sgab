@@ -12,6 +12,7 @@ class Usuario(db.Model):
     lotacao = db.Column(db.String(100), nullable=False)
     nivel_acesso = db.Column(db.String(50), nullable=False)
     ativo = db.Column(db.Boolean, default=True, nullable=False)
+    agendamentos = db.relationship('Agendamento', backref='usuario', lazy=True)
 
     def __init__(self, nome, sobrenome, usuario, senha, email, lotacao, nivel_acesso, ativo):
         self.nome = nome

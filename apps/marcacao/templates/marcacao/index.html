@@ -1,0 +1,55 @@
+{% extends 'marcacao/template_base.html' %}
+
+{% block conteudo %}
+
+<div class="container">
+    <h1>Marcacao</h1>
+    <form action="{{ url_for('marcacao_bp.inserir_marcacao') }}" method="POST">
+        tipo<input type="text" name="tipo">
+        medico<input type="text" name="medico">
+        data<input type="date" name="data">
+        vagas<input type="number" name="vagas">
+
+        <input class="btn btn-primary" type="submit" value="Gravar">
+    </form>
+</div>
+
+<br>
+<br>
+
+<div class="container">
+        <div class="table-responsive">
+            <table id="tabela" class="table table-striped">
+                <thead class="text-center">
+                  <tr class="text-center">
+                      <th scope="col">ID</th>
+                      <th scope="col">Tipo</th>
+                      <th scope="col">Médico</th>
+                      <th scope="col">Data</th>
+                      <th scope="col">Vagas</th>
+                      <th width="11%" scope="col">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for marcacao in marcacoes: %}
+                    <tr>
+                        <td> {{ marcacao.id }}</td>
+                        <td> {{marcacao.tipo }}</td>
+                        <td> {{marcacao.medico }}</td>
+                        <td> {{marcacao.data }}</td>
+                        <td> {{marcacao.vagas }}</td>
+
+                        <td>
+                            <div class="container">
+                                <a class="btn btn-success btn-sm edit-btn" href=""><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-danger btn-sm" href="" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

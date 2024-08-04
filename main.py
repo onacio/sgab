@@ -7,6 +7,7 @@ from apps.auth import auth_bp
 from apps.admin import admin_bp
 from apps.gestor import gestor_bp
 from apps.home import home_bp
+from apps.marcacao import marcacao_bp
 
 
 app = Flask(__name__, static_folder='static')
@@ -24,6 +25,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(gestor_bp)
 app.register_blueprint(home_bp)
+app.register_blueprint(marcacao_bp)
 
 if __name__ == "__main__":
     with app.app_context():
