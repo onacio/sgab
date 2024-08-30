@@ -2,6 +2,10 @@
 
 {% block titulo %}SGAB - Pedidos{% endblock %}
 
+{% block estilo %}
+  <link rel="stylesheet" href="{{url_for('pedidos_bp.static', filename='css/estilo.css')}}">
+{% endblock %}
+
 {% block conteudo %}
 
 <div class="container">
@@ -115,6 +119,7 @@
                   <option value="{{ categoria.categoria }}">{{ categoria.categoria }}</option>                  
                 {% endfor %}                  
               </select>
+              <small class="texto-descricao">Obrigatório</small>
             </div>
             <!-- FIM da primeira linha -->
             <!-- Segunda linha -->
@@ -124,18 +129,21 @@
                 <option value="" selected></option>                
                 <option value=""></option>
               </select>
+              <small class="texto-descricao">Obrigatório</small>
             </div> 
 
             <div class="col-4">
               <label class="form-label">Quantidade</label>
               <input type="number" class="form-control" id="quantidade" name="quantidade" required>
+              <small class="texto-descricao">Obrigatório</small>
             </div>            
             <!-- FIM da segunda linha -->            
             <!-- Terceira linha -->
             <div class="col-12">
               <label class="form-label">Justificativa</label>
-              <textarea class="form-control" id="justificativa" rows="3" name="justificativa"></textarea>
-            </div>            
+              <textarea class="form-control" id="justificativa" rows="3" name="justificativa" placeholder="Justifique o pedido se achar necessário"></textarea>
+              <small class="texto-descricao">Opicional</small>
+            </div>                        
             <!-- FIM da terceira linha -->
           </div>
           <div class="modal-footer">
@@ -150,5 +158,6 @@
 
 <!-- <script src="{{url_for('static', filename='js/script.js')}}"></script> -->
 <script src="{{url_for('pedidos_bp.static', filename='js/carregar_itens.js')}}"></script>
+
 
 {% endblock %}

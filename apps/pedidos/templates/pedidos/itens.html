@@ -5,8 +5,9 @@
 {% block conteudo %}
 
 <div class="container">
-    <h1 class="mt-1"><p class="text-center">CADASTRAR ITENS</p></h1>
-
+  
+  <h1 class="text-center">CADASTRO DE ITENS DE PEDIDOS</h1>
+    
     <div class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -40,7 +41,7 @@
             <th scope="col">Descrição</th>            
             <th scope="col">Categoria</th>            
             <th scope="col" width="10%">Status</th>
-            <th scope="col" width="10%">Ações</th>             
+            <th scope="col" width="12%">Ações</th>             
           </tr>
         </thead>
         <tbody>
@@ -77,12 +78,12 @@
             {% endfor %}
           {% else %}
             <tr>
-              <td class="text-center" colspan="8">Não existem pedidos cadastrados</td>
+              <td class="text-center" colspan="8">Não existem itens cadastrados no banco</td>
             </tr>
           {% endif %}
         </tbody>
       </table>
-    </div>        
+    </div>
 </div>
 
 <!-- Modal -->

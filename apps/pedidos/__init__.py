@@ -74,7 +74,7 @@ def descricao_por_categoria(categoria):
     # Consulta para agrupar descrições por categoria específica
     resultados = db.session.query(
         ItensPedido.descricao        
-    ).filter(ItensPedido.categoria == categoria).group_by(ItensPedido.descricao).all()
+    ).filter((ItensPedido.categoria == categoria) & (ItensPedido.ativo == 1)).group_by(ItensPedido.descricao).all()
 
     # Transformando os resultados em um formato de lista de dicionários
     dados = [{'descricao': resultado.descricao,} for resultado in resultados]
