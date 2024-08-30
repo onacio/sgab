@@ -1,41 +1,38 @@
 document.addEventListener('DOMContentLoaded', function() {
     const categoriaSelect = document.getElementById('categoria');
-    const descricaoSelect = document.getElementById('descricao');
+    const itemSelect = document.getElementById('item');
 
-    // Função para buscar e preencher o select de descrição
-    function buscarDescricoes(categoria) {
+    categoriaSelect.addEventListener('change', function() {
+        const categoria = this.value;
+
+        // Verifica se alguma categoria foi selecionada
         if (categoria) {
-            fetch(`/descricao_por_categoria/${categoria}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro na solicitação');
-                    }
-                    return response.json();
-                })
+            // Faz a requisição AJAX para buscar os itens da categoria
+            fetch(`/pedidos/descricao_por_categoria/${categoria}`)
+                .then(response => response.json())
                 .then(data => {
-                    // Limpar opções anteriores
-                    descricaoSelect.innerHTML = '<option value="">Selecione uma opção</option>';
+                    // Limpa as opções existentes no select de itens
+                    itemSelect.innerHTML = '';
+                    
+                    // Adiciona uma opção vazia
+                    const emptyOption = document.createElement('option');
+                    emptyOption.value = '';
+                    emptyOption.textContent = '';
+                    itemSelect.appendChild(emptyOption);
 
-                    // Adicionar novas opções ao select de descrição
+                    // Preenche o select de itens com os dados retornados
                     data.forEach(item => {
                         const option = document.createElement('option');
-                        option.value = item.descricao;
-                        option.textContent = `${item.descricao} (${item.total})`;
-                        descricaoSelect.appendChild(option);
+                        option.value = item['descricao'];
+                        option.textContent = item['descricao'];
+                        itemSelect.appendChild(option);                        
                     });
                 })
-                .catch(error => {
-                    console.error('Erro ao buscar dados:', error);
-                });
+                .catch(error => console.error('Erro:', error));
+                
         } else {
-            // Limpar o select de descrição se nenhuma categoria for selecionada
-            descricaoSelect.innerHTML = '<option value="">Selecione uma opção</option>';
+            // Se nenhuma categoria for selecionada, limpa o select de itens
+            itemSelect.innerHTML = '<option value=""></option>';
         }
-    }
-
-    // Adicionar evento ao select de categoria para buscar descrições ao mudar a categoria
-    categoriaSelect.addEventListener('change', function() {
-        const categoriaSelecionada = categoriaSelect.value;
-        buscarDescricoes(categoriaSelecionada);
     });
 });

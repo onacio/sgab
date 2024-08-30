@@ -96,7 +96,7 @@
     </div>        
 </div>
   
-  <!-- Modal -->
+<!-- Modal -->
 <div class="modal fade" id="pedidosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">    
   <div class="modal-dialog modal-lg">    
     <div class="modal-content">      
@@ -108,7 +108,7 @@
           <div class="row mb-3 g-2">                
             <!-- Primeira linha -->
             <div class="col-12">
-              <label id="categoria" for="categoria" class="form-label">Categoria</label>
+              <label class="form-label">Categoria</label>
               <select class="form-select" name="categoria" id="categoria" required>
                 <option value="" selected></option>
                 {% for categoria in categorias: %}
@@ -117,10 +117,9 @@
               </select>
             </div>
             <!-- FIM da primeira linha -->
-
             <!-- Segunda linha -->
             <div class="col-8">
-              <label id="item" for="categoria" class="form-label">Itens</label>
+              <label class="form-label">Itens</label>
               <select id="item" class="form-select" name="item" required>
                 <option value="" selected></option>                
                 <option value=""></option>
@@ -128,14 +127,13 @@
             </div> 
 
             <div class="col-4">
-              <label for="quantidade" class="form-label">Quantidade</label>
+              <label class="form-label">Quantidade</label>
               <input type="number" class="form-control" id="quantidade" name="quantidade" required>
             </div>            
-            <!-- FIM da segunda linha -->
-            
+            <!-- FIM da segunda linha -->            
             <!-- Terceira linha -->
             <div class="col-12">
-              <label for="justificativa" class="form-label">Justificativa</label>
+              <label class="form-label">Justificativa</label>
               <textarea class="form-control" id="justificativa" rows="3" name="justificativa"></textarea>
             </div>            
             <!-- FIM da terceira linha -->
@@ -150,6 +148,7 @@
   </div>
 </div> 
 
-<script src="{{url_for('static', filename='js/script.js')}}"></script>
+<!-- <script src="{{url_for('static', filename='js/script.js')}}"></script> -->
+<script src="{{url_for('pedidos_bp.static', filename='js/carregar_itens.js')}}"></script>
 
 {% endblock %}
