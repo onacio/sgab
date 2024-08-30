@@ -7,7 +7,7 @@ select.addEventListener('change', function(){
 var item = document.querySelector("#item");
 
 async function getDados(categoria){
-    const response = await fetch(`/coab/pedidos/listar/${categoria}`);
+    const response = await fetch(`/pedidos/descricao_por_categoria/${categoria}`);
     const dados = await response.json();
 
     console.log(dados); 
@@ -40,4 +40,18 @@ function abrirPDF(url) {
     const pdfUrl = url;
     window.open(pdfUrl, '_blank');
 }
+
+// código do botão excluir itens
+$('#deleteModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Botão que acionou o modal
+    var id = button.data('id'); // Extrai o ID do registro    
+    console.log('Registro ID:', id)
+
+    var form = $('#deleteForm');
+    //var action = '/pedidos/item/excluir/' + id; // Define a rota de exclusão com o ID    
+    var action = id; // Define a rota de exclusão com o ID    
+    console.log(id)
+    form.attr('action', action);
+});
+
     

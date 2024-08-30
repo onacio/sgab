@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'home/template_base.html' %}
 
 {% block titulo %}SGAB - Pedidos{% endblock %}
 
@@ -35,46 +35,52 @@
     <div class="container">
       <table id="tabela" class="table table-striped">
         <thead class="text-center">
-          <tr>          
-              <th width="10%">Data</th>                                      
-              <th>Descrição</th>            
-              <th>Categoria</th>            
-              <th>Qtde</th>            
-              <th>Liberado</th>                      
-              <th>Justificativa</th>            
-              <th width="7%">Concluído</th>            
-              <th width="7%">Status</th>            
-              <th width="9%">Ações</th>            
+          <tr>                      
+            <th scope="col" width="10%">Data</th>                      
+            <th scope="col">Descrição</th>            
+            <th scope="col">Categoria</th>            
+            <th scope="col">Qtde</th>                                    
+            <th scope="col">Liberado</th>                                    
+            <th scope="col" width="13%" >Solicitante</th>
+            <th scope="col">Justificativa</th>                                                         
+            <th scope="col">Status</th>            
+            <th scope="col" width="10%">Ações</th>             
           </tr>
         </thead>
         <tbody>
           {% if pedidos != False %}
             {% for pedido in pedidos: %}         
-              {% if pedido[7] == session['unidade_saude'] %} 
+              {% if pedido.solicitante == session['lotacao'] %} 
                 <tr>                
-                  <td> {{ pedido[1] }} </td>                  
-                  <td> {{ pedido[3] }} </td>
-                  <td> {{ pedido[4] }} </td>
-                  <td class="text-center"> {{ pedido[5] }} </td>                  
-                  <td class="text-center"> {{ pedido[6] }} </td>
-                  <td> {{ pedido[8] }} </td>
-                  <td> {{ pedido[9] }} </td>
+                  <td> {{ pedido.data.strftime("%d/%m/%Y") }} </td>                            
+                  <td> {{ pedido.descricao }} </td>                  
+                  <td> {{ pedido.categoria }} </td>
+                  <td class="text-center"> {{ pedido.quantidade }} </td>
+                  
+                  {% if pedido.quantidade_liberada == None %}
+                    <td class="text-center"> - </td>
+                  {% else %}
+                    <td class="text-center"> {{ pedido.quantidade_liberada }} </td>
+                  {% endif %}                  
+                                    
+                  <td name="justificativa"> {{ pedido.solicitante }} </td>
+                  <td> {{ pedido.justificativa }} </td>                  
                     
-                  {% if pedido[10] == 0 %}
+                  {% if pedido.status == 0 %}
                     <td class="text-center"><b style="color: rgb(108, 151, 230);">Pendente</b></td>
-                  {% elif pedido[10] == 1 %}
+                  {% elif pedido.status == 1 %}
                     <td class="text-center"><b style="color: rgb(5, 182, 5);">Concluído</b></td>
                   {% else %}
                     <td></td>
                   {% endif %}     
                   
                   <td>
-                    {% if pedido[10] == 0 %}
-                      <a class="btn btn-success btn-sm" title="Editar" href="#"><i class="bi bi-pencil-square"></i></a>
-                      <a class="btn btn-danger btn-sm" title="Excluir" href="{{ url_for('coab.coab_pedidos.excluir', id_pedido=pedido[0]) }}"><i class="bi bi-trash3-fill"></i></a>                      
-                    {% elif pedido[10] == 1 %}
-                      <a class="btn btn-success btn-sm" title="Editar" href="#" onclick="mensagem('Você não pode editar um pedido com status concluído')"><i class="bi bi-pencil-square"></i></a>
-                      <a class="btn btn-danger btn-sm" title="Excluir" href="#" onclick="mensagem('Você não pode excluir um pedido com status concluído')"><i class="bi bi-trash3-fill"></i></a>                                          
+                    {% if pedido.status == 0 %}
+                      <a class="btn btn-success btn-sm" title="Editar" href=""><i class="bi bi-pencil-square"></i></a>
+                      <a class="btn btn-danger btn-sm" title="Excluir" href=""><i class="bi bi-trash3-fill"></i></a>                      
+                    {% elif pedido.status == 1 %}
+                      <a class="btn btn-success btn-sm" title="Editar" href="" onclick="mensagem('Você não pode editar um pedido com status concluído')"><i class="bi bi-pencil-square"></i></a>
+                      <a class="btn btn-danger btn-sm" title="Excluir" href="" onclick="mensagem('Você não pode excluir um pedido com status concluído')"><i class="bi bi-trash3-fill"></i></a>                                          
                     {% endif %}
                   </td>
                 </tr>
@@ -91,48 +97,37 @@
 </div>
   
   <!-- Modal -->
-<div class="modal fade" id="pedidosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    
-  <div class="modal-dialog modal-lg">
-    
-    <div class="modal-content" style="background-color: #eceef4;">
-      
+<div class="modal fade" id="pedidosModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">    
+  <div class="modal-dialog modal-lg">    
+    <div class="modal-content">      
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Fazer pedido</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Fazer pedido</h1>        
+      </div>      
       <div class="modal-body">
-
-        <form action="{{url_for('coab.coab_pedidos.inserir')}}" method="post">
-          
+        <form action="{{ url_for('pedidos_bp.home') }}" method="post">          
           <div class="row mb-3 g-2">                
             <!-- Primeira linha -->
             <div class="col-12">
-              <label id="categoriaLabel" for="categoria" class="form-label">Categoria</label>
-              <select id="categoria" class="form-select" name="categoria" required>
-                  <option value="" selected></option>
-                  <option value="Escritório">Escritório</option>
-                  <option value="Impresso">Impresso</option>
-                  <option value="Penso">Penso</option>
-                  <option value="Medicamento">Medicamento</option>                  
+              <label id="categoria" for="categoria" class="form-label">Categoria</label>
+              <select class="form-select" name="categoria" id="categoria" required>
+                <option value="" selected></option>
+                {% for categoria in categorias: %}
+                  <option value="{{ categoria.categoria }}">{{ categoria.categoria }}</option>                  
+                {% endfor %}                  
               </select>
             </div>
             <!-- FIM da primeira linha -->
 
             <!-- Segunda linha -->
-            <div class="col-9">
-              <label id="itens" for="item" class="form-label">Item</label>
+            <div class="col-8">
+              <label id="item" for="categoria" class="form-label">Itens</label>
               <select id="item" class="form-select" name="item" required>
-                  <option value="" selected></option>
-                  <!-- <option value="" selected>Caneta</option>
-                  <option value="" selected>Solicitação</option>
-                  <option value="" selected>Borracha</option>
-                  <option value="" selected>Lápis</option>                   -->
+                <option value="" selected></option>                
+                <option value=""></option>
               </select>
-            </div>
+            </div> 
 
-            <div class="col-3">
+            <div class="col-4">
               <label for="quantidade" class="form-label">Quantidade</label>
               <input type="number" class="form-control" id="quantidade" name="quantidade" required>
             </div>            

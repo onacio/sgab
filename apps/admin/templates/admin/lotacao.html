@@ -6,6 +6,24 @@
   <div class="container">
     
     <h1><p class="text-center">CADASTRO DE LOTAÇÃO</p></h1>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for categoria, mensagem in messages %}
+                  <div class="alert alert-{{ categoria }}" role="alert">
+                      {% if categoria == 'success' %}
+                          <i class="bi bi-emoji-sunglasses-fill"></i>
+                          <b>{{ mensagem }}</b>
+                      {% else %}
+                          <i class="bi bi-exclamation-triangle"></i>
+                          <b>{{ mensagem }}</b>
+                      {% endif %}
+                  </div>   
+              {% endfor %}                     
+          {% endif %}
+      {% endwith %}
+    </div>
         
     <div class="container mb-2">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#unidadeModal">
@@ -51,7 +69,15 @@
 
                     <td>                                        
                       <div class="container">                          
-                          <a class="btn btn-success btn-sm" href="{{ url_for('admin_bp.editar_lotacao', id=lotacao.id) }}"><i class="bi bi-pencil-square"></i></a>
+                          <a class="btn btn-success btn-sm edit-btn-lotacao" href=""
+                             data-bs-toggle="modal"
+                             data-bs-target="#unidadeModal"
+                             data-id="{{ lotacao.id }}"
+                             data-nome="{{ lotacao.nome }}"
+                             data-ativo="{{ lotacao.ativo }}">
+                             <i class="bi bi-pencil-square"></i>
+                          </a>
+                          
                           <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_lotacao', id=lotacao.id) }}" onclick="return confirm('Você tem certeza que deseja excluir esta lotação?');"><i class="bi bi-trash3-fill"></i></a>
                       </div>
                     </td> 
@@ -75,27 +101,23 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="unidadeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    
-    <div class="modal-dialog">
-      
-      <div class="modal-content">
-        
+  <div class="modal fade" id="unidadeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">    
+    <div class="modal-dialog">      
+      <div class="modal-content">        
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar unidade</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastrar lotação</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        
+        </div>        
         <div class="modal-body">
-
           <form action="{{ url_for('admin_bp.lotacao') }}" method="post">
+            <input type="hidden" name="id" id="id">
             
             <div class="mb-3">
-              <label for="nome" class="col-form-label">Nome:</label>
-              <input type="text" name="nome" class="form-control" id="name">
+              <label for="nome" class="form-label">Nome:</label>
+              <input type="text" class="form-control" id="nome" name="nome">
 
-              <label for="status" class="form-label">Ativo</label>
-                <select class="form-select" name="ativo">
+              <label for="ativo" class="form-label">Ativo</label>
+                <select class="form-select" name="ativo" id="ativo">
                     <option value="" selected>-</option>
                     <option value="true">Ativo</option>
                     <option value="false">Inativo</option>
@@ -104,7 +126,7 @@
 
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="submit" class="btn btn-primary">Salvar</button>
+              <button type="submit" class="btn btn-primary" id="btn-salvar">Salvar</button>
             </div>
 
           </form>
@@ -114,5 +136,7 @@
       </div>
     </div>
   </div> 
+
+  <script src="{{ url_for('admin_bp.static', filename='js/editar_lotacao.js') }}"></script>
   
 {% endblock %}

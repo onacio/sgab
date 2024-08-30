@@ -7,6 +7,24 @@
 <div class="container">
 
     <h1><p class="text-center">Usuários do sistema</p></h1>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for categoria, mensagem in messages %}
+                  <div class="alert alert-{{ categoria }}" role="alert">
+                      {% if categoria == 'success' %}
+                          <i class="bi bi-emoji-sunglasses-fill"></i>
+                          <b>{{ mensagem }}</b>
+                      {% else %}
+                          <i class="bi bi-exclamation-triangle"></i>
+                          <b>{{ mensagem }}</b>
+                      {% endif %}
+                  </div>   
+              {% endfor %}                     
+          {% endif %}
+      {% endwith %}
+    </div>
     
     <div class="container mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usuarioModal">
@@ -52,7 +70,7 @@
                                         
                         <td>                                        
                             <div class="container">
-                                <a class="btn btn-success btn-sm edit-btn" href=""
+                                <a class="btn btn-success btn-sm edit-btn-usuario" href=""
                                    data-bs-toggle="modal"
                                    data-bs-target="#usuarioModal"
                                    data-id="{{ usuario.id }}"
@@ -79,23 +97,16 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    
-    <div class="modal-dialog modal-lg">
-      
-      <div class="modal-content">
-        
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">    
+    <div class="modal-dialog modal-lg">      
+      <div class="modal-content">        
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">Cadastro de usuário</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        
+        </div>        
         <div class="modal-body">
-
           <form action="{{ url_for('admin_bp.usuarios') }}" method="post">
-
-              <input type="hidden" name="id" id="usuario_id">
-            
+              <input type="hidden" name="id" id="id">            
             <div class="row mb-3 g-2">                
               <!-- Primeira linha -->
               <div class="col-2">
@@ -159,12 +170,14 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-              <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> Salvar</button>
+              <button type="submit" class="btn btn-primary" id="btn-salvar"><i class="bi bi-floppy"></i> Salvar</button>
             </div>
           </form>
         </div>        
       </div>
     </div>
   </div>
+
+  <script src="{{ url_for('admin_bp.static', filename='js/editar_usuario.js') }}"></script>
 
 {% endblock %}

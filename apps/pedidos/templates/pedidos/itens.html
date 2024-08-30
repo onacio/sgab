@@ -1,0 +1,157 @@
+{% extends 'admin/template_base.html' %}
+
+{% block titulo %} Cadastrar itens {% endblock %}
+
+{% block conteudo %}
+
+<div class="container">
+    <h1 class="mt-1"><p class="text-center">CADASTRAR ITENS</p></h1>
+
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for categoria, mensagem in messages %}
+                  <div class="alert alert-{{ categoria }}" role="alert">
+                      {% if categoria == 'success' %}
+                          <i class="bi bi-emoji-sunglasses-fill"></i>
+                          <b>{{ mensagem }}</b>
+                      {% else %}
+                          <i class="bi bi-exclamation-triangle"></i>
+                          <b>{{ mensagem }}</b>
+                      {% endif %}
+                  </div>   
+              {% endfor %}                     
+          {% endif %}
+      {% endwith %}
+    </div>
+
+    <div class="container mb-1">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itensModal">
+        <i class="bi bi-clipboard2-check"></i>
+        Novo item
+      </button>
+    </div>
+
+    <div class="container">
+      <table id="tabela" class="table table-striped">
+        <thead class="text-center">
+          <tr>                      
+            <th scope="col" width="10%">Id</th>                      
+            <th scope="col">Descrição</th>            
+            <th scope="col">Categoria</th>            
+            <th scope="col" width="10%">Status</th>
+            <th scope="col" width="10%">Ações</th>             
+          </tr>
+        </thead>
+        <tbody>
+          {% if itens != False %}
+            {% for item in itens: %}   
+                <tr>                
+                    <td> {{ item.id }} </td>                            
+                    <td> {{ item.descricao }} </td>
+                    <td> {{ item.categoria }} </td>
+
+                    {% if item.ativo == 1 %}
+                        <td class="text-center"><i class="bi bi-check-circle"></i></td>                
+                    {% elif item.ativo == 0 %}
+                        <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
+                    {% else %}  
+                        <td></td>
+                    {% endif %} 
+
+                  <td>
+                      <a class="btn btn-success btn-sm edit-btn-pedido"
+                          data-bs-toggle="modal"
+                          data-bs-target="#itensModal"
+                          data-id="{{ item.id }}"
+                          data-descricao="{{ item.descricao }}"
+                          data-categoria="{{ item.categoria }}"
+                          data-ativo="{{ item.ativo }}">
+                      <i class="bi bi-pencil-square"></i>
+                      </a>
+                      <a type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="/pedidos/item/excluir/{{ item.id }}" title="Excluir">
+                        <i class="bi bi-trash3-fill"></i>
+                      </a>
+                  </td>
+                </tr>                                 
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td class="text-center" colspan="8">Não existem pedidos cadastrados</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>        
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="itensModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">    
+  <div class="modal-dialog modal-lg">    
+    <div class="modal-content">      
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Fazer pedido</h1>   
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>     
+      </div>      
+      <div class="modal-body">
+        <form action="{{ url_for('pedidos_bp.cadastrar_itens') }}" method="post"> 
+          <input type="hidden" name="id" id="id">         
+          <div class="row mb-3 g-2">                
+            <!-- Primeira linha -->
+            <div class="col-12">
+                <label for="descricao" class="form-label">Descrição do item</label>
+                <input type="text" class="form-control" id="descricao" name="descricao" required>
+            </div>
+            <!-- FIM da primeira linha -->
+            <!-- Segunda linha -->
+            <div class="col-12">
+              <label for="categoria" class="form-label">Categoria</label>
+              <input type="text" class="form-control" id="categoria" name="categoria" required>
+            </div>            
+            <!-- FIM da segunda linha -->            
+            <!-- Terceira linha -->
+            <div class="col-12">
+                <label id="ativo" for="ativo" class="form-label">Status</label>
+                <select class="form-select" name="ativo" id="ativo" required>
+                    <option value="" selected></option>
+                    <option value="1">Ativo</option>
+                    <option value="0">Inativo</option>                                     
+                </select>
+              </div>            
+            <!-- FIM da terceira linha -->
+          </div>
+          <div class="modal-footer">            
+            <button type="submit" class="btn btn-primary" id="btn-salvar"><i class="bi bi-floppy"></i> Cadastrar item</button>
+          </div>
+        </form>
+      </div>        
+    </div>
+  </div>
+</div> 
+
+<!-- Modal de Confirmação -->
+<!-- Este Modal faz referência a uma função do script.js na pasta estática principal do sistema -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>              
+          </div>
+          <div class="modal-body">
+              Tem certeza de que deseja excluir este registro?
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <form id="deleteForm" method="POST" action="">
+                <!-- Ao clicar neste botão é chamado um script que passa a url com o id do item a ser excluído  -->
+                <button type="submit" class="btn btn-danger">Excluir</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script src="{{url_for('pedidos_bp.static', filename='js/editar_pedido.js')}}"></script>
+<script src="{{url_for('pedidos_bp.static', filename='js/excluir_pedido.js')}}"></script>
+
+{% endblock %}
