@@ -5,10 +5,11 @@
 {% block conteudo %}
 
 <div class="container">
+  <div class="container mt-2">
+    <h1 class="text-center">Usuários do sistema</h1>
+  </div>
 
-    <h1><p class="text-center">Usuários do sistema</p></h1>
-
-    <div class="container">
+  <div class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
               {% for categoria, mensagem in messages %}
@@ -24,76 +25,76 @@
               {% endfor %}                     
           {% endif %}
       {% endwith %}
-    </div>
+  </div>
     
-    <div class="container mb-2">
+  <div class="container mb-2">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#usuarioModal">
           <i class="bi bi-person-add"></i>
           Adicionar usuário
         </button>
-    </div>    
-
-    <div class="container">
-        <div class="table-responsive">
-            <table id="tabela" class="table table-striped">
-                <thead class="text-center">
-                  <tr class="text-center">
-                      <th scope="col">ID</th>
-                      <th scope="col">Nome</th>            
-                      <th scope="col">Usuário</th>            
-                      <th scope="col">Senha</th>            
-                      <th scope="col">E-mail</th>            
-                      <th scope="col">Nível</th>
-                      <th width="13%" scope="col">Lotação</th>
-                      <th width="5%" scope="col">Ativo</th>
-                      <th width="11%" scope="col">Ações</th>            
-                  </tr>
-                </thead>
-                <tbody>
-                {% for usuario in usuarios: %}          
-                    <tr>  
-                        <td> {{ usuario.id }}</td>
-                        <td> {{usuario.nome }} {{ usuario.sobrenome }}</td>
-                        <td> {{usuario.usuario }}</td>
-                        <td> {{usuario.senha }}</td>
-                        <td> {{usuario.email }}</td>
-                        <td> {{usuario.nivel_acesso }}</td>
-                        <td> {{usuario.lotacao }}</td>
+  </div>    
+    
+  
+  <div class="container border" style="background-color: #ffffff;">
+    <div class="table-responsive">
+      <table id="tabela" class="table table-striped">
+        <thead class="text-center">
+          <tr class="text-center">
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>            
+            <th scope="col">Usuário</th>            
+            <th scope="col">Senha</th>            
+            <th scope="col">E-mail</th>            
+            <th scope="col">Nível</th>
+            <th width="13%" scope="col">Lotação</th>
+            <th width="5%" scope="col">Ativo</th>
+            <th width="11%" scope="col">Ações</th>            
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios: %}          
+            <tr>  
+              <td> {{ usuario.id }}</td>
+              <td> {{usuario.nome }} {{ usuario.sobrenome }}</td>
+              <td> {{usuario.usuario }}</td>
+              <td> {{usuario.senha }}</td>
+              <td> {{usuario.email }}</td>
+              <td> {{usuario.nivel_acesso }}</td>
+              <td> {{usuario.lotacao }}</td>
                         
-                        {% if usuario.ativo == 1 %}
-                          <td class="text-center"><i class="bi bi-check-circle"></i></td>                
-                        {% elif usuario.ativo == 0 %}
-                          <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
-                        {% else %}  
-                          <td></td>
-                        {% endif %}  
+              {% if usuario.ativo == 1 %}
+                <td class="text-center"><i class="bi bi-check-circle"></i></td>                
+              {% elif usuario.ativo == 0 %}
+                <td class="text-center"><i class="bi bi-x-circle-fill"></i></td>
+              {% else %}  
+                <td></td>
+              {% endif %}  
                                         
-                        <td>                                        
-                            <div class="container">
-                                <a class="btn btn-success btn-sm edit-btn-usuario" href=""
-                                   data-bs-toggle="modal"
-                                   data-bs-target="#usuarioModal"
-                                   data-id="{{ usuario.id }}"
-                                   data-nome="{{ usuario.nome }}"
-                                   data-sobrenome="{{ usuario.sobrenome }}"
-                                   data-usuario="{{ usuario.usuario }}"
-                                   data-senha="{{ usuario.senha }}"
-                                   data-email="{{ usuario.email }}"
-                                   data-nivel="{{ usuario.nivel_acesso }}"
-                                   data-lotacao="{{ usuario.lotacao }}"
-                                   data-ativo="{{ usuario.ativo }}">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-
-                                <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_usuario', id=usuario.id) }}" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
-                            </div>
-                        </td>
-                    </tr>                     
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>    
+              <td>                                        
+                <div class="container">
+                  <a class="btn btn-success btn-sm edit-btn-usuario" href=""
+                      data-bs-toggle="modal"
+                      data-bs-target="#usuarioModal"
+                      data-id="{{ usuario.id }}"
+                      data-nome="{{ usuario.nome }}"
+                      data-sobrenome="{{ usuario.sobrenome }}"
+                      data-usuario="{{ usuario.usuario }}"
+                      data-senha="{{ usuario.senha }}"
+                      data-email="{{ usuario.email }}"
+                      data-nivel="{{ usuario.nivel_acesso }}"
+                      data-lotacao="{{ usuario.lotacao }}"
+                      data-ativo="{{ usuario.ativo }}">
+                      <i class="bi bi-pencil-square"></i>
+                  </a>
+                  <a class="btn btn-danger btn-sm" href="{{ url_for('admin_bp.excluir_usuario', id=usuario.id) }}" onclick="return confirm('Você tem certeza que deseja excluir este usuário?');"><i class="bi bi-trash3-fill"></i></a>
+                </div>
+              </td>
+            </tr>                     
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>      
 </div>
 
 <!-- Modal -->

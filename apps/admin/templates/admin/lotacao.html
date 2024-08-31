@@ -3,9 +3,11 @@
 {% block titulo %}SGAB - Pedidos{% endblock %}
 
 {% block conteudo %}
-  <div class="container">
+<div class="container">
     
-    <h1><p class="text-center">CADASTRO DE LOTAÇÃO</p></h1>
+  <div class="container mt-2">
+    <h1 class="text-center">CADASTRO DE LOTAÇÃO</h1>
+  </div>    
 
     <div class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -40,7 +42,7 @@
       </button>
     </div>    
     
-    <div class="container">
+    <div class="container border" style="background-color: #ffffff;">
       <div class="table-responsive">
         <table id="tabela" class="table table-striped">
           <thead class="text-center">

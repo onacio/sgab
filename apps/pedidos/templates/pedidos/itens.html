@@ -5,8 +5,10 @@
 {% block conteudo %}
 
 <div class="container">
-  
-  <h1 class="text-center">CADASTRO DE ITENS DE PEDIDOS</h1>
+
+  <div class="container mt-2">
+    <h1 class="text-center">CADASTRO DE ITENS PARA PEDIDOS</h1>
+  </div>  
     
     <div class="container">
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -26,14 +28,14 @@
       {% endwith %}
     </div>
 
-    <div class="container mb-1">
+    <div class="container mb-2 mt-2">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itensModal">
         <i class="bi bi-clipboard2-check"></i>
         Novo item
       </button>
     </div>
 
-    <div class="container">
+    <div class="container border" style="background-color: #ffffff;">
       <table id="tabela" class="table table-striped">
         <thead class="text-center">
           <tr>                      

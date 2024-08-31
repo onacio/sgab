@@ -20,17 +20,5 @@ def login_required(role):
 
     return decorator
 
-# def login_required(role):
-#     def decorator(f):
-#         @wraps(f)
-#         def decorated_function(*args, **kwargs):
-#             if 'usuario' in session and session['nivel_acesso'] == role:
-#                 session['url_atual'] = request.path # verificar depois se esse código está funcionando
-#                 return f(*args, **kwargs)
-#
-#                 # return redirect(session['next_url'])
-#             return redirect(url_for('auth_bp.logout'))
-#
-#         return decorated_function
-#
-#     return decorator
+def is_autorizad():
+    pass
