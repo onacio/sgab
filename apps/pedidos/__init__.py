@@ -93,4 +93,18 @@ def excluir_item(id):
         flash('Item deletado com sucesso!!!', 'success')
         return redirect(url_for('pedidos_bp.cadastrar_itens'))
     except:
-        flash('Erro ao deletar item!', 'error')
+        flash('Erro ao deletar item!', 'danger')
+
+@pedidos_bp.route('/excluir/<int:id>', methods=['POST'])
+@login_required('usuario')
+def excluir_pedido(id):
+    print('chegou no excluir')
+    pedido = Pedidos.query.get(id)
+
+    try:
+        db.session.delete(pedido)
+        db.session.commit()
+        flash('Pedido excluído com sucesso!!!', 'success')
+        return redirect(url_for('pedidos_bp.home'))
+    except:
+        flash('Erro ao deletar pedido!', 'danger')
