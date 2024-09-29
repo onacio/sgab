@@ -30,6 +30,7 @@ app.register_blueprint(marcacao_bp)
 app.register_blueprint(pedidos_bp)
 
 if __name__ == "__main__":
+    # Cria o banco de dados e as tablea
     with app.app_context():
         db.create_all()
     app.run(debug=True)
